@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+
 const tempMovieData = [
   {
     imdbID: "tt1375666",
@@ -53,22 +54,35 @@ const average = (arr) =>
 
 const App = () => {
   const[movies,setMovies]=useState(tempMovieData)
-   
+
+  // /see due to show movies in numresults we experienced  a prop drilling . 
+  // to solver prop drilling we will use compknent coposition method . instead of accepin the movies prop in navbar we will accept {chidlren } for cmponent composition .   
+// prop drilling do compknent m hora h navbar nd main mai , so instead of accepting props they will now accept children nd all componets will be insidde app nd wil be accepted as children nd ab sabke liye state hai without proper dirlling as state is inside app only and we bring all other components also inside 
+
+// prop drilling is isseu again fo listbox component as there are lots of children nd passing props , so we can do same again for listbox also .
   return (
     <>
-     <Navbar movies={movies}/>
-     <Main movies={movies}/>
+     <Navbar >
+      //this is composition
+      <Logo/>
+      <Search/>
+      <NumResults movies={movies} />
+      </Navbar>
+     <Main >
+     <ListBox >
+     <MovieList movies={movies} />
+     </ListBox>
+     <WatchedBox  />
+     </Main>
     </>
   );
 }
 
-function Navbar({movies}){
+function Navbar({children}){
   //navbar is structural componet only responsible for layout nd ui
   return (
     <nav className="nav-bar">
-      <Logo/>
-      <Search/>
-      <NumResults movies={movies} />
+      
     </nav>
 
   )
@@ -100,23 +114,23 @@ function NumResults({movies}){
   )
 }
 
-function Main({movies}){
+function Main({children}){
   return (
     <main className="main">
-      <ListBox movies={movies}/>
-      <WatchedBox movies={movies} />
+      {children}
     </main>
   )
 }
 
-function ListBox({movies}){
+function ListBox({children}){
   const[isOpen1,setIsopen1]=useState(true);
   return (
     <div className="box">
       <button className="btn-toggle" onClick={()=>setIsopen1((open)=>!open)}>
         {isOpen1 ? "-": "+"}
       </button>
-      {isOpen1 && <MovieList movies={movies} />}
+      {isOpen1 && children} 
+      {/* // dont do {chidlren} as it will give error */}
     </div>
   )
 }
