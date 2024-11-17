@@ -52,21 +52,23 @@ const average = (arr) =>
 
 
 const App = () => {
+  const[movies,setMovies]=useState(tempMovieData)
+   
   return (
     <>
-     <Navbar/>
-     <Main/>
+     <Navbar movies={movies}/>
+     <Main movies={movies}/>
     </>
   );
 }
 
-function Navbar(){
+function Navbar({movies}){
   //navbar is structural componet only responsible for layout nd ui
   return (
     <nav className="nav-bar">
       <Logo/>
       <Search/>
-      <NumResults/>
+      <NumResults movies={movies} />
     </nav>
 
   )
@@ -92,35 +94,35 @@ function Search(){
   )
 }
 
-function NumResults(){
+function NumResults({movies}){
   return (
-    <p className="num-results">Found <strong>X</strong> results</p>
+    <p className="num-results">Found <strong>{movies.length}</strong> results</p>
   )
 }
 
-function Main(){
+function Main({movies}){
   return (
     <main className="main">
-      <ListBox/>
-      <WatchedBox/>
+      <ListBox movies={movies}/>
+      <WatchedBox movies={movies} />
     </main>
   )
 }
 
-function ListBox(){
+function ListBox({movies}){
   const[isOpen1,setIsopen1]=useState(true);
   return (
     <div className="box">
       <button className="btn-toggle" onClick={()=>setIsopen1((open)=>!open)}>
         {isOpen1 ? "-": "+"}
       </button>
-      {isOpen1 && <MovieList/>}
+      {isOpen1 && <MovieList movies={movies} />}
     </div>
   )
 }
 
-function MovieList(){
-  const[movies,setMovies]=useState(tempMovieData)
+function MovieList({movies}){
+ 
 
   return (
     <ul className="list">
