@@ -54,6 +54,8 @@ const average = (arr) =>
 
 const App = () => {
   const[movies,setMovies]=useState(tempMovieData)
+  const[watched,setWatched]=useState(tempWatchedData)
+   const[isOpen2,setIsopen2]=useState(true);
 
   // /see due to show movies in numresults we experienced  a prop drilling . 
   // to solver prop drilling we will use compknent coposition method . instead of accepin the movies prop in navbar we will accept {chidlren } for cmponent composition .   
@@ -69,10 +71,15 @@ const App = () => {
       <NumResults movies={movies} />
       </Navbar>
      <Main >
-     <ListBox >
+     <Box >
      <MovieList movies={movies} />
-     </ListBox>
-     <WatchedBox  />
+     </Box>
+     <Box  >
+     
+        <WatchedSummary watched={watched}/>
+        <WatchedMoviesList watched={watched}/> 
+       
+     </Box>
      </Main>
     </>
   );
@@ -122,7 +129,7 @@ function Main({children}){
   )
 }
 
-function ListBox({children}){
+function Box({children}){
   const[isOpen1,setIsopen1]=useState(true);
   return (
     <div className="box">
@@ -134,6 +141,28 @@ function ListBox({children}){
     </div>
   )
 }
+
+// NOW WE WILL USE COMPONENT COMPOSITON TO MAKE REUSABLE COMPONENTS 
+// See , see closely , how similar are the list box nad watched box ,ekdm similar , so we don’t need both of them , we need a box component which can be reused and then we use component composition to make it reusable 
+// function WatchedBox(){
+//   const[watched,setWatched]=useState(tempWatchedData)
+//   const[isOpen2,setIsopen2]=useState(true);
+
+//   return (
+//    <div className="box">
+//      <button className="btn-toggle" onClick={()=>setIsopen2(!open)}>
+//        {isOpen2 ? "_": "+"}
+//      </button>
+//      {isOpen2 && (
+//        <>
+//        <WatchedSummary watched={watched}/>
+//        <WatchedMoviesList watched={watched}/> 
+//        </>
+//      )}
+//    </div>
+//   )
+// }
+
 
 function MovieList({movies}){
  
@@ -163,24 +192,7 @@ function Movie({movie}){
   )
 }
 
-function WatchedBox(){
-     const[watched,setWatched]=useState(tempWatchedData)
-     const[isOpen2,setIsopen2]=useState(true);
 
-     return (
-      <div className="box">
-        <button className="btn-toggle" onClick={()=>setIsopen2(!open)}>
-          {isOpen2 ? "_": "+"}
-        </button>
-        {isOpen2 && (
-          <>
-          <WatchedSummary watched={watched}/>
-          <WatchedMoviesList watched={watched}/> 
-          </>
-        )}
-      </div>
-     )
-}
 
 function WatchedSummary({watched}){
   const avgImdbRating=average(watched.map((movie)=>movie.imdbRating));
